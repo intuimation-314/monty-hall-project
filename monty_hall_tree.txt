@@ -1,0 +1,39 @@
+monty-hall-project/
+├── main.cpp
+│   ├── showMenu()                     # Displays menu options
+│   └── main()                         # Handles user choices, calls MontyHall class
+│
+├── monty_hall.h
+│   ├── class MontyHall
+│   │   ├── int doors, prizeDoor, ...
+│   │   ├── MontyHall(int)
+│   │   ├── runInteractiveGame()
+│   │   ├── runSimulation(int)
+│   │   └── playSingleSimulation()
+│   │
+│   ├── printIntroDiagram(int)
+│   ├── displayDoors(...)
+│   ├── logGameResult(...)
+│   └── viewGameStats()
+│
+├── monty_hall.cpp
+│   ├── MontyHall::MontyHall()                # Constructor
+│   ├── MontyHall::playSingleSimulation()     # One trial with/without switch
+│   ├── MontyHall::runSimulation()            # Simulate multiple trials
+│   ├── MontyHall::runInteractiveGame()       # Full playable session
+│   ├── printIntroDiagram()                   # ASCII door drawing
+│   ├── displayDoors()                        # ASCII display of state
+│   ├── logGameResult()                       # Appends to game_stats.txt
+│   └── viewGameStats()                       # Reads and displays stats
+│
+├── game_stats.txt (auto-generated)
+│   └── [timestamp] Mode: Interactive, Doors: 3, Switched: Yes, Result: Win
+│
+├── .gitignore
+│   ├── *.o, monty, monty.exe, game_stats.txt, etc.
+│
+└── README.md
+    ├── Project overview
+    ├── How to compile
+    ├── Features and file structure
+    └── Sample output and license

@@ -24,6 +24,11 @@ This program helps you test and see it yourself!
 
 ---
 
+## 🗂 File & Function Structure
+For a full breakdown of all files and internal functions/classes, see [monty_hall_tree.txt](./monty_hall_tree.txt).
+
+---
+
 ## 🚀 How to Compile
 
 ```bash
