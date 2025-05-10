@@ -1,0 +1,15 @@
+# Compiled binary
+monty.exe
+monty
+
+# Object files
+*.o
+
+# IDE/editor junk
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+
+# Statistics log
+game_stats.txt
