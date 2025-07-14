@@ -123,7 +123,6 @@ import math
 
 class MontyHallGeneralized(Scene):
     def construct(self):
-        self.camera.background_color = "#1e1e1e"
 
         N = 40 # You can change this to 10, 20, 50, 100...
 
@@ -165,8 +164,6 @@ class MontyHallGeneralized(Scene):
 
 class Classic3DoorVersion(Scene):
     def construct(self):
-        self.camera.background_color = "#1e1e1e"
-
         # Title
         title = Tex(r"\textbf{Classic 3-Door Version}", color=WHITE).scale(1.2)
         self.play(Write(title))
@@ -226,8 +223,6 @@ class Classic3DoorVersion(Scene):
 
 class GeneralizedMontyHallN(Scene):
     def construct(self):
-        self.camera.background_color = "#1e1e1e"
-
         # Title
         title = Tex(r"\textbf{Generalized Version}", color=WHITE).scale(1.2)
         self.play(Write(title))
@@ -239,6 +234,7 @@ class GeneralizedMontyHallN(Scene):
 
         door_positions = [-4, -2.5, -1]
         doors_initial = VGroup()
+        doors_initial_label = VGroup()
 
         for idx, pos in enumerate(door_positions):
             door = Rectangle(height=3, width=1.5, color=WHITE, fill_color=BLUE_C, fill_opacity=1).scale(0.6)
@@ -249,9 +245,10 @@ class GeneralizedMontyHallN(Scene):
             circle.move_to(door.get_center())
             num.move_to(circle.get_center())
 
-            doors_initial.add(VGroup(door, circle, num))
+            doors_initial.add(door)
+            doors_initial_label.add(VGroup(circle, num))
 
-        self.play(LaggedStart(*[FadeIn(door) for door in doors_initial], lag_ratio=0.3))
+        self.play(LaggedStart(*[FadeIn(door) for door in VGroup(doors_initial, doors_initial_label)], lag_ratio=0.3))
         self.wait(0.5)
 
         # First probability label above Door 1
@@ -266,6 +263,7 @@ class GeneralizedMontyHallN(Scene):
 
         final_positions = [2, 3.5, 5]
         doors_final = VGroup()
+        doors_final_labels = VGroup()
         final_labels = ["N-2", "N-1", "N"]
 
         for label, pos in zip(final_labels, final_positions):
@@ -277,16 +275,17 @@ class GeneralizedMontyHallN(Scene):
             circle.move_to(door.get_center())
             num.move_to(circle.get_center())
 
-            doors_final.add(VGroup(door, circle, num))
+            doors_final.add(door)
+            doors_final_labels.add(VGroup(circle, num))
 
-        self.play(LaggedStart(*[FadeIn(door) for door in doors_final], lag_ratio=0.3))
+        self.play(LaggedStart(*[FadeIn(door) for door in VGroup(doors_final, doors_final_labels)], lag_ratio=0.3))
         self.wait(0.5)
 
         #### Show remaining probability ####
 
         group_rest = VGroup(doors_initial[1:], doors_final)
         surround = SurroundingRectangle(group_rest, color=YELLOW, buff=0.4)
-        prob_rest = Tex(r"$1 - \frac{1}{N}$", font_size=36, color=YELLOW).next_to(surround, UP, buff=0.3)
+        prob_rest = Tex(r"$1 - \frac{1}{N} = \frac{N-1}{N}$", font_size=32, color=YELLOW).next_to(surround, UP, buff=0.3)
 
         self.play(FadeIn(prob_first))
         self.wait(2)
@@ -308,7 +307,6 @@ class GeneralizedMontyHallN(Scene):
 
 class GeneralizedMontyHall(Scene):
     def construct(self):
-        self.camera.background_color = "#1e1e1e"
         N = 10  # You can set any N here
 
         # Title
@@ -389,3 +387,237 @@ class GeneralizedMontyHall(Scene):
         door = door_rects[pick_idx]
         self.play(door.animate.set_color(YELLOW))
         self.wait(0.5)
+
+class GeneralizedMontyHall100(Scene):
+    def construct(self):
+        # Title
+        title = Tex(r"\textbf{Generalized Version}", color=WHITE).scale(1.2)
+        self.play(Write(title))
+        self.wait(2)
+        self.play(title.animate.to_edge(UP))
+        self.wait(0.5)
+
+        #### First 3 doors: 1, 2, 3 ####
+
+        door_positions = [-4, -2.5, -1]
+        doors_initial = VGroup()
+        doors_initial_label = VGroup()
+
+        for idx, pos in enumerate(door_positions):
+            door = Rectangle(height=3, width=1.5, color=WHITE, fill_color=BLUE_C, fill_opacity=1).scale(0.6)
+            door.move_to(RIGHT * pos)
+
+            circle = Circle(radius=0.3, color=WHITE, fill_color=WHITE, fill_opacity=1)
+            num = Text(str(idx+1), color=BLACK, font_size=32)
+            circle.move_to(door.get_center())
+            num.move_to(circle.get_center())
+
+            doors_initial.add(door)
+            doors_initial_label.add(VGroup(circle, num))
+
+        self.play(LaggedStart(*[FadeIn(door) for door in VGroup(doors_initial, doors_initial_label)], lag_ratio=0.3))
+
+        # First probability label above Door 1
+        prob_first = Tex(r"$\frac{1}{100}$", font_size=36, color=WHITE).next_to(doors_initial[0][0], UP, buff=0.4)
+
+        #### Show dots ####
+        dots = Tex(r"$\cdots$", font_size=80, color=WHITE).move_to(RIGHT*0.5)
+        self.play(FadeIn(dots))
+
+        #### Last 3 doors: N-2, N-1, N ####
+
+        final_positions = [2, 3.5, 5]
+        doors_final = VGroup()
+        doors_final_labels = VGroup()
+        final_labels = ["98", "99", "100"]
+
+        for label, pos in zip(final_labels, final_positions):
+            door = Rectangle(height=3, width=1.5, color=WHITE, fill_color=BLUE_C, fill_opacity=1).scale(0.6)
+            door.move_to(RIGHT * pos)
+
+            circle = Circle(radius=0.3, color=WHITE, fill_color=WHITE, fill_opacity=1)
+            num = Text(label, color=BLACK, font_size=26)
+            circle.move_to(door.get_center())
+            num.move_to(circle.get_center())
+
+            doors_final.add(door)
+            doors_final_labels.add(VGroup(circle,num))
+
+        self.play(LaggedStart(*[FadeIn(door) for door in VGroup(doors_final, doors_final_labels)], lag_ratio=0.3))
+        self.wait(0.5)
+
+        #### Show remaining probability ####
+
+        group_rest = VGroup(doors_initial[1:], doors_final)
+        surround = SurroundingRectangle(group_rest, color=YELLOW, buff=0.4)
+        prob_rest = Tex(r"$\frac{99}{100}$", font_size=36, color=YELLOW).next_to(surround, UP, buff=0.3)
+
+        self.play(FadeIn(prob_first))
+        self.wait(2)
+        self.play(Create(surround), FadeIn(prob_rest))
+        self.wait(2)
+
+        self.play(VGroup(doors_initial[2], doors_final).animate.set_fill(opacity=0.2))
+        self.wait(1)
+
+        #### Collapse rectangle to final door N ####
+        final_door_rect = doors_initial[1]
+        surround_final = SurroundingRectangle(final_door_rect, color=YELLOW, buff=0.4)
+        self.play(Transform(surround, surround_final), prob_rest.animate.next_to(surround_final, UP, buff=0.3))
+        self.wait(1)
+
+        #### Emphasize final door ####
+        self.play(Indicate(final_door_rect, color=YELLOW))
+        self.wait(2)
+
+class ProbabilityVsN(Scene):
+    def construct(self):
+        # Title
+        title = Tex(r"\textbf{Probability of Winning vs Number of Doors}", color=WHITE).scale(1.2)
+        self.play(Write(title))
+        self.wait(2)
+        self.play(title.animate.to_edge(UP))
+        self.wait(0.5)
+
+        # Setup axes
+        axes = Axes(
+            x_range=[0, 110, 10],  # up to 100
+            y_range=[0, 1.1, 0.1],
+            x_length=10,
+            y_length=5,
+            axis_config={"color": WHITE},
+            tips=False
+        ).move_to(DOWN)
+
+        x_label = axes.get_x_axis_label(r"N", edge=RIGHT, direction=DOWN, buff=0.4)
+        y_label = axes.get_y_axis_label(r"P(\text{win if switch})", edge=UP, direction=LEFT, buff=0.4)
+
+        self.play(Create(axes), FadeIn(x_label, y_label))
+        self.wait(1)
+
+        # Initial symbolic formula
+        formula = Tex(r"$P(\text{switch}) = \frac{N-1}{N}$", font_size=48, color=WHITE).to_edge(UP).shift(DOWN * 0.5)
+        self.play(FadeIn(formula))
+        self.wait(1)
+
+        # Now loop through N = 3 to 100
+        dots = VGroup()
+
+        for N in range(3, 101):
+            prob = (N - 1) / N
+            dot = Dot(point=axes.c2p(N, prob), color=YELLOW, radius=0.05)
+            dots.add(dot)
+
+            # Replace formula dynamically
+            new_formula = Tex(
+                rf"$P(\text{{switch}}) = \frac{{{N-1}}}{{{N}}} = {prob:.2f}$",
+                font_size=48, color=WHITE
+            ).to_edge(UP).shift(DOWN * 0.5)
+
+            if N == 3:
+                self.play(FadeIn(dot), Transform(formula, new_formula), run_time=0.4)
+            else:
+                self.play(FadeIn(dot), Transform(formula, new_formula), run_time=0.08)
+
+        self.wait(1)
+
+        # Final asymptote line at y=1
+        line = DashedLine(start=axes.c2p(0, 1), end=axes.c2p(110, 1), color=BLUE)
+        label1 = Tex("1", font_size=30, color=WHITE).next_to(line, LEFT, buff=0.2)
+        self.play(Create(line), FadeIn(label1))
+        self.wait(2)
+
+class MarilynScene(Scene):
+    def construct(self):
+        # Quote (using flushleft for paragraph-style text)
+        quote = Tex(
+            r"\"In 1990, Marilyn vos Savant explained the Monty Hall\\",
+            r"problem in her Parade magazine , but thousands of people\\",
+            r"wrote in claiming she was wrong.\"",
+        )
+        quote.scale(0.7).arrange(DOWN)
+        # Author line
+        author = Text("– On the Monty Hall Controversy", font_size=30, slant=ITALIC, color=BLUE)
+        author.next_to(quote, UP, buff=2)
+        name = Text("– Marilyn vos Savant ", font_size=20, slant=ITALIC)
+
+        # Optional: color emphasis
+        quote.set_color_by_tex("Marilyn vos Savant", YELLOW)
+        quote.set_color_by_tex("Monty Hall", GREEN)
+        quote.set_color_by_tex("Parade", TEAL)
+        quote.set_color_by_tex("PhDs", RED)
+
+        # Position text to left
+        quote.move_to(2.5 * LEFT)
+
+        # Image of Marilyn (replace with actual file if needed)
+        image = ImageMobject("marilyn.png").scale(0.9)
+        image.next_to(quote, RIGHT, buff=0.8)
+        name.next_to(image, DOWN, buff=0.6)
+
+        # Animate
+        self.play(Write(quote), Write(author), FadeIn(image), Write(name), run_time=2)
+        self.wait(3)
+
+class MontyAdam(Scene):
+    def construct(self):
+        # Title
+        title = Tex(r"\textbf{Classic 3-Door Version}", color=WHITE).scale(1.2)
+        self.play(Write(title))
+        self.wait(2)
+        self.play(title.animate.to_edge(UP))
+        self.wait(0.5)
+
+        # Create 3 doors horizontally
+        door_positions = [-4, 0, 4]
+        doors = VGroup()
+        number_labels = VGroup()
+
+        for i, pos in enumerate(door_positions):
+            door = Rectangle(height=4, width=2, color=WHITE, fill_color=BLUE_C, fill_opacity=1).scale(0.8)
+            door.move_to(RIGHT * pos)
+            doors.add(door)
+
+            circle = Circle(radius=0.3, color=WHITE, fill_color=WHITE, fill_opacity=1)
+            num = Text(str(i+1), color=BLACK, font_size=36)
+            circle.move_to(door.get_center())
+            num.move_to(circle.get_center())
+            number_labels.add(VGroup(circle, num))
+
+        self.play(Create(doors), FadeIn(number_labels))
+        self.wait(1)
+
+        # Probability labels
+        prob_labels = VGroup(
+            Tex(r"$\frac{1}{3}$", font_size=36, color=WHITE).next_to(doors[0], UP, buff=0.3),
+            Tex(r"$\frac{1}{3}$", font_size=36, color=WHITE).next_to(doors[1], UP, buff=0.3),
+            Tex(r"$\frac{1}{3}$", font_size=36, color=WHITE).next_to(doors[2], UP, buff=0.3),
+        )
+
+        self.play(FadeIn(prob_labels))
+        self.wait(1)
+
+        # Show combined 2/3 probability rectangle
+        group_for_2over3 = VGroup(doors[1], doors[2])
+        rect_2over3 = SurroundingRectangle(group_for_2over3, color=YELLOW, buff=0.3)
+        label_2over3 = Tex(r"$\frac{2}{3}$", font_size=40, color=YELLOW).next_to(rect_2over3, UP, buff=0.2)
+
+        self.play(Indicate(doors[0]))
+        self.wait()
+        self.play(Indicate(doors[1]), Indicate(doors[2]))
+        self.wait()
+        self.play(Create(rect_2over3), FadeIn(label_2over3))
+        self.wait(2)
+
+        # Simulate Monty opening Door 3 (index 2)
+        self.play(doors[2].animate.set_fill(opacity=0.2))
+        self.wait(1)
+
+        # Animate rectangle shrinking to Door 2 (index 1)
+        rect_final = SurroundingRectangle(doors[1], color=YELLOW, buff=0.3)
+        self.play(Transform(rect_2over3, rect_final), FadeOut(prob_labels[1:3]), label_2over3.animate.next_to(rect_final, UP, buff=0.2))
+        self.wait(2)
+
+        # Small pause to emphasize final result
+        self.play(Indicate(doors[1], color=YELLOW))
+        self.wait(2)
